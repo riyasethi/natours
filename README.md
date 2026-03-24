@@ -4,25 +4,25 @@ Natours is a full-stack travel booking application built with Node.js, Express, 
 
 ## Features
 
-- User signup, login, logout, and password reset
-- Booking confirmation emails for newly booked tours
-- Tour listing and tour detail pages
-- Protected account page with profile/password updates
-- Role-based authorization
-- Review and booking models
-- Server-rendered Pug views
-- MongoDB Atlas-backed persistence
-- Built-in demo dataset for local setup and portfolio demos
+-   User signup, login, logout, and password reset
+-   Booking confirmation emails for newly booked tours
+-   Tour listing and tour detail pages
+-   Protected account page with profile/password updates
+-   Role-based authorization
+-   Review and booking models
+-   Server-rendered Pug views
+-   MongoDB Atlas-backed persistence
+-   Built-in demo dataset for local setup and portfolio demos
 
 ## Tech Stack
 
-- Node.js
-- Express
-- MongoDB Atlas
-- Mongoose
-- Pug
-- JWT authentication
-- Stripe
+-   Node.js
+-   Express
+-   MongoDB Atlas
+-   Mongoose
+-   Pug
+-   JWT authentication
+-   Stripe
 
 ## Local Setup
 
@@ -32,32 +32,8 @@ Natours is a full-stack travel booking application built with Node.js, Express, 
 npm install
 ```
 
-1. Copy the `config.example.env` file to a local `config.env` file.
-2. Fill in your environment variables:
-
-```env
-NODE_ENV=development
-PORT=3000
-APP_URL=http://127.0.0.1:3000
-DATABASE=mongodb+srv://natours-user:<PASSWORD>@cluster.mongodb.net/natours?retryWrites=true&w=majority&appName=natours
-DATABASE_PASSWORD=your-db-password
-
-JWT_SECRET=your-long-random-secret
-JWT_EXPIRES_IN=90d
-JWT_COOKIE_EXPIRES_IN=90
-
-EMAIL_USERNAME=your-gmail-address@gmail.com
-EMAIL_PASSWORD=your-google-app-password
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=465
-EMAIL_SECURE=true
-EMAIL_FROM=your-gmail-address@gmail.com
-
-STRIPE_SECRET_KEY=your-stripe-secret-key
-STRIPE_PUBLIC_KEY=your-stripe-publishable-key
-```
-
-1. Start the app:
+2. Copy the `config.example.env` file to a local `config.env` file. Fill in your environment variables.
+3. Start the app:
 
 ```bash
 npm start
@@ -105,25 +81,3 @@ EMAIL_FROM=your-gmail-address@gmail.com
 ```
 
 4. Restart the app after updating the password.
-
-For deployment, add the same values as environment variables on your hosting platform instead of committing them to Git.
-
-## Deployment URL Setup
-
-Set `APP_URL` to the public URL where the app is deployed.
-
-Examples:
-
-```env
-APP_URL=http://127.0.0.1:3000
-```
-
-```env
-APP_URL=https://your-app.onrender.com
-```
-
-Natours uses `APP_URL` for:
-- welcome email links
-- password reset email links
-- booking confirmation links
-- Stripe success/cancel redirects
