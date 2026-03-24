@@ -5,6 +5,7 @@ const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const Email = require('./../utils/email');
+const { buildAppUrl } = require('./../utils/appUrl');
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -42,9 +43,10 @@ exports.signup = catchAsync(async (req, res, next) => {
         passwordConfirm: req.body.passwordConfirm,
     });
 
-    const url = `${req.protocol}://${req.get('host')}/me`;
-    console.log(url);
-    await new Email(newUser, url).sendWelcome();
+    const url = buildAppUrl(req, '/me');
+    new Email(newUser, url).sendWelcome().catch((err) => {
+        console.error('Welcome email failed to send', err.message);
+    });
 
     createSendToken(newUser, 201, res);
 });
@@ -160,7 +162,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     // 3) Send it to user's email
     try {
-        const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        const resetURL = buildAppUrl(req, `/reset-password/${resetToken}`);
         await new Email(user, resetURL).sendPasswordReset();
 
         res.status(200).json({

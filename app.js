@@ -21,12 +21,60 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+}
+
 // 1) GLOBAL MIDDLEWARES
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Set security HTTP headers
-app.use(helmet());
+// Set security HTTP headers while allowing required third-party assets.
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                baseUri: ["'self'"],
+                fontSrc: ["'self'", 'https:', 'data:'],
+                formAction: ["'self'"],
+                frameAncestors: ["'self'"],
+                imgSrc: [
+                    "'self'",
+                    'data:',
+                    'blob:',
+                    'https://*.stripe.com',
+                    'https://images.ctfassets.net',
+                    'https://api.mapbox.com',
+                    'https://*.tiles.mapbox.com',
+                    'https://*.mapbox.com',
+                ],
+                objectSrc: ["'none'"],
+                scriptSrc: ["'self'", 'https://js.stripe.com', 'https://api.mapbox.com'],
+                scriptSrcAttr: ["'none'"],
+                styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+                connectSrc: [
+                    "'self'",
+                    'https://api.mapbox.com',
+                    'https://events.mapbox.com',
+                    'https://*.stripe.com',
+                    'https://q.stripe.com',
+                    'https://r.stripe.com',
+                    'https://m.stripe.network',
+                ],
+                frameSrc: [
+                    "'self'",
+                    'https://js.stripe.com',
+                    'https://hooks.stripe.com',
+                    'https://checkout.stripe.com',
+                    'https://*.stripe.com',
+                ],
+                workerSrc: ["'self'", 'blob:'],
+            },
+        },
+        crossOriginEmbedderPolicy: false,
+    }),
+);
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -59,10 +107,9 @@ app.use(
     }),
 );
 
-// Test middleware
+// Request timestamp used in some views/controllers.
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
-    console.log(req.cookies);
     next();
 });
 

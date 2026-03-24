@@ -2,3 +2,7 @@ node_modules
 .cache
 .parcel-cache
 config.env
+public/js/index.js.map
+public/img/users/user-*.jpeg
+public/img/users/user-*.jpg
+public/img/users/user-*.png

@@ -8,23 +8,14 @@ module.exports = class Email {
         this.firstName = user.name.split(' ')[0];
         this.url = url;
         this.from = `Riya Sethi <${process.env.EMAIL_FROM}>`;
+        this.data = {};
     }
 
     newTransport() {
-        if (process.env.NODE_ENV === 'production') {
-            // Sendgrid
-            return nodemailer.createTransport({
-                service: 'SendGrid',
-                auth: {
-                    user: process.env.SENDGRID_USERNAME,
-                    pass: process.env.SENDGRID_PASSWORD,
-                },
-            });
-        }
-
         return nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
-            port: process.env.EMAIL_PORT,
+            port: Number(process.env.EMAIL_PORT),
+            secure: process.env.EMAIL_SECURE === 'true',
             auth: {
                 user: process.env.EMAIL_USERNAME,
                 pass: process.env.EMAIL_PASSWORD,
@@ -39,6 +30,7 @@ module.exports = class Email {
             firstName: this.firstName,
             url: this.url,
             subject,
+            data: this.data,
         });
 
         // 2) Define email options
@@ -47,7 +39,7 @@ module.exports = class Email {
             to: this.to,
             subject,
             html,
-            text: htmlToText.fromString(html),
+            text: htmlToText(html),
         };
 
         // 3) Create a transport and send email
@@ -60,5 +52,16 @@ module.exports = class Email {
 
     async sendPasswordReset() {
         await this.send('passwordReset', 'Your password reset token (valid for only 10 minutes)');
+    }
+
+    async sendBookingConfirmation(tour) {
+        this.data = {
+            tourName: tour.name,
+            price: tour.price,
+            duration: tour.duration,
+            summary: tour.summary,
+        };
+
+        await this.send('bookingConfirmation', `Booking confirmed: ${tour.name}`);
     }
 };

@@ -1,0 +1,21 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p Your booking is confirmed and you're officially in for #{data.tourName}.
+  p
+    | Tour duration: #{data.duration} days
+    br
+    | Price paid: $#{data.price}
+  p #{data.summary}
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank') View your bookings
+  p We can't wait for you to experience the trip.
+  p - Riya Sethi, Natours

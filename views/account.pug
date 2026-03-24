@@ -7,24 +7,31 @@ mixin navItem(link, text, icon, active)
         use(xlink:href=`img/icons.svg#icon-${icon}`)
       | #{text}
 
+mixin navItemDisabled(text, icon)
+  li.side-nav__item--disabled
+    a.side-nav__placeholder(href='javascript:void(0)' aria-disabled='true')
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text}
+
 block content
   main.main
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +navItem('#', 'Settings', 'settings', true)
+          +navItem('/me', 'Settings', 'settings', true)
           +navItem('/my-tours', 'My bookings', 'briefcase')
-          +navItem('#', 'My reviews', 'star')
-          +navItem('#', 'Billing', 'credit-card')
+          +navItemDisabled('My reviews', 'star')
+          +navItemDisabled('Billing', 'credit-card')
 
         - if (user.role === 'admin')
           .admin-nav
             h5.admin-nav__heading Admin
             ul.side-nav
-              +navItem('#', 'Manage tours', 'map')
-              +navItem('#', 'Manage users', 'users')
-              +navItem('#', 'Manage reviews', 'star')
-              +navItem('#', 'Manage bookings', 'briefcase')
+              +navItemDisabled('Manage tours', 'map')
+              +navItemDisabled('Manage users', 'users')
+              +navItemDisabled('Manage reviews', 'star')
+              +navItemDisabled('Manage bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container

@@ -27,17 +27,50 @@ exports.getTour = catchAsync(async (req, res, next) => {
         return next(new AppError('There is no tour with that name.', 404));
     }
 
+    let hasBookedTour = false;
+    if (res.locals.user) {
+        hasBookedTour = Boolean(
+            await Booking.findOne({
+                tour: tour._id,
+                user: res.locals.user._id,
+                paid: true,
+            }).select('_id'),
+        );
+    }
+
     // 2) Build template
     // 3) Render template using data from 1)
     res.status(200).render('tour', {
         title: `${tour.name} Tour`,
         tour,
+        hasBookedTour,
+        bookingsEnabled: Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PUBLIC_KEY),
+        stripePublicKey: process.env.STRIPE_PUBLIC_KEY || '',
     });
 });
 
 exports.getLoginForm = (req, res) => {
     res.status(200).render('login', {
         title: 'Log into your account',
+    });
+};
+
+exports.getForgotPasswordForm = (req, res) => {
+    res.status(200).render('forgotPassword', {
+        title: 'Forgot your password',
+    });
+};
+
+exports.getSignupForm = (req, res) => {
+    res.status(200).render('signup', {
+        title: 'Create your account',
+    });
+};
+
+exports.getResetPasswordForm = (req, res) => {
+    res.status(200).render('resetPassword', {
+        title: 'Reset your password',
+        token: req.params.token,
     });
 };
 
