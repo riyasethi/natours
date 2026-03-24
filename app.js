@@ -44,6 +44,7 @@ app.use(
                     "'self'",
                     'data:',
                     'blob:',
+                    'https://res.cloudinary.com',
                     'https://*.stripe.com',
                     'https://images.ctfassets.net',
                     'https://api.mapbox.com',

@@ -67,8 +67,8 @@ Any ZIP/postcode
 
 Natours supports two email options:
 
-- Gmail SMTP for local development
-- Brevo API for deployment platforms like Render
+-   Gmail SMTP for local development
+-   Brevo API for deployment platforms like Render
 
 ### Gmail SMTP Setup
 
@@ -115,5 +115,3 @@ CLOUDINARY_CLOUD_NAME=your-cloudinary-cloud-name
 CLOUDINARY_API_KEY=your-cloudinary-api-key
 CLOUDINARY_API_SECRET=your-cloudinary-api-secret
 ```
-
-Seeded/demo users still use the local `/img/users/...` files, while newly uploaded photos use Cloudinary URLs.
