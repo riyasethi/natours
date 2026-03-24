@@ -63,21 +63,43 @@ Any 3-digit CVC
 Any ZIP/postcode
 ```
 
-## Gmail SMTP Setup
+## Email Setup
 
-Natours now uses SMTP environment variables in every environment, and this repo is configured for Gmail SMTP by default.
+Natours supports two email options:
+
+- Gmail SMTP for local development
+- Brevo API for deployment platforms like Render
+
+### Gmail SMTP Setup
 
 1. Turn on 2-Step Verification for your Google account.
 2. Create a Google App Password for Mail.
 3. Put the values in `config.env`:
 
 ```env
+EMAIL_PROVIDER=smtp
 EMAIL_USERNAME=your-gmail-address@gmail.com
 EMAIL_PASSWORD=your-google-app-password
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=465
 EMAIL_SECURE=true
 EMAIL_FROM=your-gmail-address@gmail.com
+EMAIL_FROM_NAME=Riya Sethi
 ```
 
 4. Restart the app after updating the password.
+
+### Brevo API Setup
+
+1. In Brevo, verify your sender email or domain.
+2. Create an API key from your Brevo SMTP & API settings.
+3. Put these values in `config.env` or your deployment environment:
+
+```env
+EMAIL_PROVIDER=brevo
+EMAIL_FROM=your-verified-sender@example.com
+EMAIL_FROM_NAME=Riya Sethi
+BREVO_API_KEY=your-brevo-api-key
+```
+
+Brevo uses HTTPS, so it works on Render free where SMTP ports are blocked.
