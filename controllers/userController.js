@@ -4,6 +4,7 @@ const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
+const { uploadImageBuffer } = require('./../utils/cloudinary');
 
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -34,9 +35,20 @@ exports.uploadUserPhoto = upload.single('photo');
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
 
-    req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+    const publicId = `user-${req.user.id}-${Date.now()}`;
+    const processedImageBuffer = await sharp(req.file.buffer)
+        .resize(500, 500)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toBuffer();
 
-    await sharp(req.file.buffer).resize(500, 500).toFormat('jpeg').jpeg({ quality: 90 }).toFile(`public/img/users/${req.file.filename}`);
+    const uploadResult = await uploadImageBuffer({
+        buffer: processedImageBuffer,
+        folder: 'natours/users',
+        publicId,
+    });
+
+    req.file.filename = uploadResult.secure_url;
 
     next();
 });

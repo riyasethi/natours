@@ -9,6 +9,7 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
+const { getUserPhotoSrc } = require('./utils/cloudinary');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -110,6 +111,7 @@ app.use(
 // Request timestamp used in some views/controllers.
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
+    res.locals.getUserPhotoSrc = getUserPhotoSrc;
     next();
 });
 
